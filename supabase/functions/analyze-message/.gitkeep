@@ -1,0 +1,62 @@
+// Analyze message with AI
+import Anthropic from "@anthropic-ai/sdk";
+
+const client = new Anthropic();
+
+interface MessagePayload {
+  content: string;
+  sender_id: string;
+}
+
+Deno.serve(async (req) => {
+  // CORS headers
+  if (req.method === "OPTIONS") {
+    return new Response("ok", { headers: getCorsHeaders() });
+  }
+
+  try {
+    const payload: MessagePayload = await req.json();
+
+    const message = await client.messages.create({
+      model: "claude-opus-4-1",
+      max_tokens: 1024,
+      system: `You are an AI assistant analyzing messages in a personal messaging OS. 
+      Analyze the following message and provide:
+      1. Sentiment analysis (positive/negative/neutral)
+      2. Key topics/keywords
+      3. Brief summary
+      Return as JSON.`,
+      messages: [
+        {
+          role: "user",
+          content: `Analyze this message: "${payload.content}"`,
+        },
+      ],
+    });
+
+    const responseText =
+      message.content[0].type === "text" ? message.content[0].text : "";
+    const analysis = JSON.parse(responseText);
+
+    return new Response(JSON.stringify(analysis), {
+      headers: { ...getCorsHeaders(), "Content-Type": "application/json" },
+      status: 200,
+    });
+  } catch (error) {
+    return new Response(
+      JSON.stringify({ error: error instanceof Error ? error.message : String(error) }),
+      {
+        headers: { ...getCorsHeaders(), "Content-Type": "application/json" },
+        status: 400,
+      }
+    );
+  }
+});
+
+function getCorsHeaders() {
+  return {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Headers": "authorization, x-client-info, content-type",
+  };
+}

@@ -1,0 +1,13 @@
+Loading scopes…
+Searching for existing projects…
+Detected services:
+• frontend  [Next.js]  →  /             
+• backend   [Next.js]  →  /_/backend/*  
+
+Services are configured via vercel.json.
+Linked to bogdans-projects-0d93e2a8/frontend (created .vercel and added it to .gitignore)
+> Connecting GitHub repository: https://github.com/AmbrosioBogdan/PMO
+> Connected
+Deploying bogdans-projects-0d93e2a8/frontend
+Error: Invalid vercel.json - should NOT have additional property `nodeVersion`. Please remove it.
+View Documentation: https://vercel.com/docs/concepts/projects/project-configuration

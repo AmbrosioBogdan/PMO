@@ -1,10 +1,6 @@
 {
-  "buildCommand": "pnpm build",
+  "buildCommand": "npm run build",
   "framework": "nextjs",
-  "installCommand": "pnpm install",
-  "nodeVersion": "20.x",
-  "outputDirectory": ".next",
-  "publicSource": "./public",
-  "rootDirectory": "frontend",
-  "serverlessFunctionRegion": "arn1"
+  "installCommand": "npm install",
+  "outputDirectory": ".next"
 }
