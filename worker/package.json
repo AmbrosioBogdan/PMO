@@ -1,0 +1,29 @@
+{
+  "name": "pmo-worker",
+  "version": "0.1.0",
+  "description": "Personal Messaging OS - WhatsApp Worker (Playwright)",
+  "private": true,
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "tsx watch src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "lint": "eslint src",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.1",
+    "pino": "^8.16.2",
+    "pino-pretty": "^10.2.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.2.0",
+    "@types/node": "^20.0.0",
+    "tsx": "^4.0.0",
+    "eslint": "^8.50.0",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0"
+  }
+}

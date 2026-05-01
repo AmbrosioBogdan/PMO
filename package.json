@@ -1,0 +1,23 @@
+{
+  "name": "pmo-monorepo",
+  "version": "0.1.0",
+  "description": "Personal Messaging OS - Monorepo",
+  "private": true,
+  "workspaces": [
+    "frontend",
+    "backend",
+    "worker",
+    "shared"
+  ],
+  "scripts": {
+    "dev": "pnpm --parallel -r run dev",
+    "build": "pnpm --parallel -r run build",
+    "lint": "pnpm --parallel -r run lint",
+    "type-check": "pnpm --parallel -r run type-check",
+    "clean": "pnpm --parallel -r run clean && rm -rf node_modules",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier": "^3.0.0"
+  }
+}

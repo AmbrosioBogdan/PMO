@@ -1,0 +1,145 @@
+PERSONAL MESSAGING OS — PROJECT SPECIFICATION (2026)
+
+1.  OVERVIEW Personal Messaging OS is a private, AI-enhanced messaging
+    control system for WhatsApp Web automation. It allows reading,
+    sending, scheduling, and managing messages through a modern web
+    dashboard accessible from mobile and desktop.
+
+Key principles: - Personal use only - Zero or minimal cost
+infrastructure - Cloud-based access from any device - AI-assisted
+messaging - Clean, modern UI/UX - Modular and extensible architecture
+
+------------------------------------------------------------------------
+
+2.  CORE FEATURES
+
+2.1 Messaging Control - Read WhatsApp messages via automation worker -
+Send messages manually from dashboard - Schedule messages for future
+delivery - Manage conversations in unified inbox - Search across
+messages and contacts
+
+2.2 AI ASSISTANCE - Suggest replies to incoming messages - Generate
+multiple response options - Adapt tone based on contact profile -
+Summarize conversations - Classify message urgency (high/medium/low) -
+Create reminders for unanswered messages
+
+2.3 AUTOMATIONS - Scheduled messaging system - Auto-reply rules based on
+keywords or contacts - Smart filters for message prioritization -
+Follow-up reminders if no reply received - Silent hours / focus mode
+
+2.4 DASHBOARD - System status (WhatsApp connected, worker online, AI
+active) - Quick actions (send message, schedule, open inbox) - Daily
+overview of messages - AI-generated digest of important conversations
+
+------------------------------------------------------------------------
+
+3.  SYSTEM ARCHITECTURE
+
+Frontend: - Next.js web application - Responsive design (mobile-first) -
+Progressive Web App (PWA) - Hosted on Vercel
+
+Backend: - Next.js API routes or server actions - Handles business logic
+and API communication
+
+Database: - Supabase PostgreSQL - Stores users, messages, automations,
+schedules, AI logs
+
+WhatsApp Worker: - Playwright browser automation - Runs on Fly.io cloud
+instance - Maintains persistent WhatsApp Web session - Reads and sends
+messages
+
+AI Layer: - OpenRouter / Groq / HuggingFace APIs - Multi-provider
+fallback system - No local AI required
+
+Code Repository: - GitHub for version control and deployment pipeline
+
+------------------------------------------------------------------------
+
+4.  DATA MODEL (SIMPLIFIED)
+
+Users: - id - name - settings
+
+Chats: - id - contact_name - last_message - priority
+
+Messages: - id - chat_id - content - direction (incoming/outgoing) -
+timestamp
+
+ScheduledMessages: - id - chat_id - content - send_at - status
+
+Automations: - id - trigger_type - condition - action - enabled
+
+AILogs: - id - input - output - model_used - timestamp
+
+------------------------------------------------------------------------
+
+5.  USER INTERFACE STRUCTURE
+
+Navigation Tabs: 1. Home Dashboard 2. Inbox 3. Automations 4. AI Hub 5.
+Settings
+
+Design Principles: - Minimal and elegant UI - Light and dark mode
+support - Smooth transitions and animations - Soft shadows and spacing -
+High readability typography
+
+------------------------------------------------------------------------
+
+6.  INBOX SYSTEM
+
+-   Unified chat list
+-   Filters (important, unread, work, personal)
+-   Chat view with message history
+-   AI-powered reply suggestions
+-   Message composer with scheduling option
+
+------------------------------------------------------------------------
+
+7.  AI HUB
+
+-   Suggested replies panel
+-   Tone selection (formal, casual, concise, personal style)
+-   Contact memory profiles
+-   Daily summary of communication
+-   Prompt customization system
+
+------------------------------------------------------------------------
+
+8.  AUTOMATION ENGINE
+
+Capabilities: - Rule-based triggers - Keyword-based replies - Time-based
+scheduling - Priority escalation system - Message follow-up automation
+
+------------------------------------------------------------------------
+
+9.  DEPLOYMENT STACK
+
+-   Frontend: Vercel + Next.js
+-   Backend: Next.js API
+-   Database: Supabase
+-   Worker: Fly.io (Playwright)
+-   AI Providers: OpenRouter / Groq / HuggingFace
+-   Source Control: GitHub
+
+------------------------------------------------------------------------
+
+10. NON-FUNCTIONAL REQUIREMENTS
+
+-   Secure authentication
+-   Private access only
+-   Low latency interactions
+-   Mobile-first design
+-   Stable WhatsApp session handling
+-   Scalable modular architecture
+
+------------------------------------------------------------------------
+
+11. FUTURE EXTENSIONS
+
+-   Voice assistant integration
+-   Multi-platform messaging (Telegram, Email)
+-   Advanced CRM personal system
+-   Full AI agent automation mode
+-   Calendar and reminder integration
+
+------------------------------------------------------------------------
+
+END OF SPECIFICATION

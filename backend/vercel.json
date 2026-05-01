@@ -1,0 +1,11 @@
+{
+  "buildCommand": "pnpm build",
+  "framework": "nextjs",
+  "installCommand": "pnpm install",
+  "nodeVersion": "20.x",
+  "outputDirectory": ".next",
+  "rootDirectory": "backend",
+  "env": {
+    "OPENROUTER_API_KEY": "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"
+  }
+}

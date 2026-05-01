@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnpm-store/
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Environment
+.env
+.env.local
+.env.*.local
+.env.production.local
+
+# Build
+.next/
+dist/
+build/
+out/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Runtime
+.cache/
+.turbo/
+.vercel/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Playwright
+test-results/
+playwright-report/

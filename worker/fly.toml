@@ -1,0 +1,20 @@
+app = "pmo-worker"
+primary_region = "fra"  # Frankfurt
+
+[build]
+  builder = "dockerfile"
+
+[env]
+  OPENROUTER_API_KEY = "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"
+  SUPABASE_URL = "your-supabase-url"
+  SUPABASE_ANON_KEY = "your-supabase-key"
+
+[deploy]
+  release_command = ""
+
+[[services]]
+  internal_port = 8080
+  processes = ["app"]
+
+  [services.http_checks]
+    enabled = false
