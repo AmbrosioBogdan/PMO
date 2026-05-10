@@ -5,3 +5,5 @@ export * from './session/store.js';
 export * from './session/validator.js';
 export * from './actions/sendMessage.js';
 export * from './actions/readMessages.js';
+export * from './actions/qr.js';
+export * from './actions/chats.js';

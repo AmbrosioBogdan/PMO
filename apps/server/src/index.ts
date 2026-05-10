@@ -1,9 +1,10 @@
-import './worker.js';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { messageRoutes } from './routes/messages.js';
 import { jobRoutes } from './routes/jobs.js';
+import { chatRoutes } from './routes/chats.js';
 import { Server } from 'socket.io';
+import * as worker from './worker.js';
 
 const fastify = Fastify({ logger: true });
 
@@ -12,6 +13,7 @@ await fastify.register(cors);
 // Register routes
 fastify.register(messageRoutes, { prefix: '/messages' });
 fastify.register(jobRoutes, { prefix: '/jobs' });
+fastify.register(chatRoutes, { prefix: '/chats' });
 
 fastify.get('/health', async () => ({ status: 'ok' }));
 
@@ -27,6 +29,7 @@ const start = async () => {
     });
 
     fastify.decorate('io', io);
+    worker.setIo(io);
 
     io.on('connection', (socket) => {
       console.log('Client connected:', socket.id);

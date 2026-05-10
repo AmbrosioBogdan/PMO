@@ -1,126 +1,162 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import { Button, Card } from '@wa-hub/ui';
+import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 
-export default function Dashboard() {
-  const [to, setTo] = useState('');
-  const [message, setMessage] = useState('');
-  const [jobs, setJobs] = useState<any[]>([]);
-  const [status, setStatus] = useState('Idle');
+export default function WhatsAppHub() {
+  const [status, setStatus] = useState('connecting');
+  const [qr, setQr] = useState<string | null>(null);
+  const [chats, setChats] = useState<any[]>([]);
+  const [selectedChat, setSelectedChat] = useState<any>(null);
+  const [messages, setMessages] = useState<any[]>([]);
+  const [newMessage, setNewMessage] = useState('');
+  const scrollRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Check if window is defined to avoid SSR issues
-    if (typeof window !== 'undefined') {
-      const socket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001');
+    const socket = io(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001');
 
-      socket.on('connect', () => console.log('Connected to WS'));
-      socket.on('browser:status', (s) => setStatus(s));
+    socket.on('wa:status', (s) => setStatus(s));
+    socket.on('wa:qr', (qrData) => setQr(qrData));
+    socket.on('wa:chats', (data) => setChats(data));
 
-      fetchJobs();
-      const interval = setInterval(fetchJobs, 5000);
-      return () => {
-        socket.disconnect();
-        clearInterval(interval);
-      }
-    }
+    return () => { socket.disconnect(); };
   }, []);
 
-  const fetchJobs = async () => {
-    try {
-      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/jobs`);
-      if (!res.ok) throw new Error('Network response was not ok');
-      const data = await res.json();
-      setJobs(Array.isArray(data) ? data : []);
-    } catch (e) {
-      console.error('Failed to fetch jobs');
+  useEffect(() => {
+    if (selectedChat) {
+      fetchMessages(selectedChat.name);
+      const interval = setInterval(() => fetchMessages(selectedChat.name), 3000);
+      return () => clearInterval(interval);
     }
+  }, [selectedChat]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const fetchMessages = async (name: string) => {
+    try {
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/chats/${encodeURIComponent(name)}/messages`);
+      if (res.ok) {
+        const data = await res.json();
+        setMessages(data);
+      }
+    } catch (e) { console.error(e); }
   };
 
   const handleSend = async () => {
+    if (!newMessage || !selectedChat) return;
     try {
       await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/messages/send`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ to, message })
+        body: JSON.stringify({ to: selectedChat.name, message: newMessage })
       });
-      setTo('');
-      setMessage('');
-      fetchJobs();
-    } catch (e) {
-      console.error('Failed to send message');
-    }
+      setNewMessage('');
+    } catch (e) { console.error(e); }
   };
 
-  return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <header className="mb-8 flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-gray-900">WA Automation Hub</h1>
-        <div className="flex items-center gap-2">
-          <span className="text-sm text-gray-500">Engine Status:</span>
-          <span className="px-2 py-1 bg-green-100 text-green-800 rounded-full text-xs font-semibold">
-            {status}
-          </span>
+  if (status === 'qr_required' || !status.includes('auth')) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-screen bg-[#f0f2f5] p-4">
+        <div className="bg-white p-8 rounded-lg shadow-md max-w-md w-full text-center">
+          <h1 className="text-2xl font-light text-gray-700 mb-6">WhatsApp Automation Hub</h1>
+          {qr ? (
+            <div className="space-y-4">
+              <img src={`data:image/png;base64,${qr}`} alt="QR Code" className="mx-auto w-64 h-64 border" />
+              <p className="text-sm text-gray-500">Scan this code with WhatsApp on your phone</p>
+            </div>
+          ) : (
+            <div className="animate-pulse flex flex-col items-center">
+              <div className="w-64 h-64 bg-gray-200 rounded mb-4"></div>
+              <p className="text-sm text-gray-500">Loading WhatsApp session...</p>
+            </div>
+          )}
         </div>
-      </header>
+      </div>
+    );
+  }
 
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card title="Quick Send">
-          <div className="space-y-4">
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Phone Number</label>
+  return (
+    <div className="flex h-screen bg-[#f0f2f5] overflow-hidden">
+      {/* Sidebar */}
+      <div className="w-1/3 border-r bg-white flex flex-col">
+        <header className="h-16 bg-[#f0f2f5] flex items-center px-4 border-b">
+          <div className="w-10 h-10 bg-gray-300 rounded-full"></div>
+          <h2 className="ml-4 font-semibold">My Chats</h2>
+        </header>
+        <div className="flex-1 overflow-y-auto">
+          {chats.map((chat) => (
+            <div
+              key={chat.id}
+              onClick={() => setSelectedChat(chat)}
+              className={`flex items-center p-3 cursor-pointer hover:bg-gray-100 border-b ${selectedChat?.id === chat.id ? 'bg-gray-200' : ''}`}
+            >
+              <div className="w-12 h-12 bg-[#00a884] rounded-full flex items-center justify-center text-white font-bold">
+                {chat.name[0]}
+              </div>
+              <div className="ml-4 flex-1">
+                <div className="flex justify-between">
+                  <h3 className="font-medium text-gray-900">{chat.name}</h3>
+                  <span className="text-xs text-gray-500">12:00</span>
+                </div>
+                <p className="text-sm text-gray-500 truncate">{chat.lastMessage || 'Click to view'}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Main Viewport */}
+      <div className="flex-1 flex flex-col bg-[#e5ddd5] relative">
+        {selectedChat ? (
+          <>
+            <header className="h-16 bg-[#f0f2f5] flex items-center px-4 border-b z-10">
+              <div className="w-10 h-10 bg-[#00a884] rounded-full flex items-center justify-center text-white font-bold">
+                {selectedChat.name[0]}
+              </div>
+              <h2 className="ml-4 font-semibold">{selectedChat.name}</h2>
+            </header>
+
+            <div className="flex-1 overflow-y-auto p-4 space-y-2" ref={scrollRef}>
+              {messages.map((msg) => (
+                <div key={msg.id} className={`flex ${msg.fromMe ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-[70%] p-2 rounded-lg shadow-sm text-sm ${
+                    msg.fromMe ? 'bg-[#dcf8c6] rounded-tr-none' : 'bg-white rounded-tl-none'
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <footer className="h-16 bg-[#f0f2f5] flex items-center px-4 gap-4">
               <input
                 type="text"
-                className="mt-1 block w-full border rounded-md p-2"
-                placeholder="393331234567"
-                value={to}
-                onChange={(e) => setTo(e.target.value)}
+                value={newMessage}
+                onChange={(e) => setNewMessage(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                placeholder="Type a message"
+                className="flex-1 bg-white rounded-lg px-4 py-2 outline-none"
               />
+              <button
+                onClick={handleSend}
+                className="bg-[#00a884] text-white px-4 py-2 rounded-lg font-medium"
+              >
+                Send
+              </button>
+            </footer>
+          </>
+        ) : (
+          <div className="flex-1 flex flex-col items-center justify-center text-gray-500">
+            <div className="w-64 h-64 bg-white rounded-full flex items-center justify-center mb-6 shadow-sm">
+              <svg className="w-32 h-32 text-gray-200" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/><path d="M11 7h2v6h-2zm0 8h2v2h-2z"/></svg>
             </div>
-            <div>
-              <label className="block text-sm font-medium text-gray-700">Message</label>
-              <textarea
-                className="mt-1 block w-full border rounded-md p-2"
-                rows={3}
-                value={message}
-                onChange={(e) => setMessage(e.target.value)}
-              />
-            </div>
-            <Button onClick={handleSend} className="w-full">Enqueue Message</Button>
+            <h2 className="text-2xl font-light">Select a chat to start messaging</h2>
+            <p className="mt-2">The hub will synchronize your WhatsApp Web session in real-time.</p>
           </div>
-        </Card>
-
-        <div className="md:col-span-2">
-          <Card title="Recent Jobs">
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead>
-                  <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Type</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Status</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Date</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-gray-200">
-                  {jobs.map((job: any) => (
-                    <tr key={job.id}>
-                      <td className="px-6 py-4 text-sm font-medium text-gray-900">{job.type}</td>
-                      <td className="px-6 py-4 text-sm">
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          job.status === 'completed' ? 'bg-blue-100 text-blue-800' :
-                          job.status === 'failed' ? 'bg-red-100 text-red-800' : 'bg-yellow-100 text-yellow-800'
-                        }`}>
-                          {job.status}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 text-sm text-gray-500">{new Date(job.createdAt).toLocaleString()}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
+        )}
       </div>
     </div>
   );
