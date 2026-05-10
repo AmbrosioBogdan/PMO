@@ -1,0 +1,7 @@
+{
+  "name": "@wa-hub/web",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Starting web app in dev mode...'"
+  }
+}

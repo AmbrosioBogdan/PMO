@@ -7,8 +7,42 @@
         "typescript": "^5.0.0",
       },
     },
+    "apps/server": {
+      "name": "@wa-hub/server",
+    },
+    "apps/web": {
+      "name": "@wa-hub/web",
+    },
+    "packages/config": {
+      "name": "@wa-hub/config",
+      "version": "0.1.0",
+    },
+    "packages/database": {
+      "name": "@wa-hub/database",
+      "version": "0.1.0",
+    },
+    "packages/ui": {
+      "name": "@wa-hub/ui",
+      "version": "0.1.0",
+    },
+    "packages/wa-engine": {
+      "name": "@wa-hub/wa-engine",
+      "version": "0.1.0",
+    },
   },
   "packages": {
+    "@wa-hub/config": ["@wa-hub/config@workspace:packages/config"],
+
+    "@wa-hub/database": ["@wa-hub/database@workspace:packages/database"],
+
+    "@wa-hub/server": ["@wa-hub/server@workspace:apps/server"],
+
+    "@wa-hub/ui": ["@wa-hub/ui@workspace:packages/ui"],
+
+    "@wa-hub/wa-engine": ["@wa-hub/wa-engine@workspace:packages/wa-engine"],
+
+    "@wa-hub/web": ["@wa-hub/web@workspace:apps/web"],
+
     "typescript": ["typescript@5.9.3", "", { "bin": { "tsc": "bin/tsc", "tsserver": "bin/tsserver" } }, "sha512-jl1vZzPDinLr9eUt3J/t7V6FgNEw9QjvBPdysz9KfQDD41fQrC2Y4vKQdiaUpFT4bXlb1RHhLpp8wtm6M5TgSw=="],
   }
 }

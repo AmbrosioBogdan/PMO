@@ -1,0 +1,7 @@
+{
+  "name": "@wa-hub/server",
+  "private": true,
+  "scripts": {
+    "dev": "echo 'Starting server in dev mode...'"
+  }
+}
