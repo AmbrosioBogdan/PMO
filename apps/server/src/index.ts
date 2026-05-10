@@ -1,3 +1,4 @@
+import './worker.js';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { messageRoutes } from './routes/messages.js';

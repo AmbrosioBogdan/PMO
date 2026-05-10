@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "bun --filter '*' dev",
-    "build": "bun --filter '*' build",
+    "build": "bun install && bun --filter '*' build",
     "start": "bun --filter '*' start",
     "lint": "bun --filter '*' lint",
     "db:generate": "bun --filter '@wa-hub/database' generate",
