@@ -6,7 +6,7 @@ import { io } from 'socket.io-client';
 export default function Dashboard() {
   const [to, setTo] = useState('');
   const [message, setMessage] = useState('');
-  const [jobs, setJobs] = useState([]);
+  const [jobs, setJobs] = useState<any[]>([]);
   const [status, setStatus] = useState('Idle');
 
   useEffect(() => {
