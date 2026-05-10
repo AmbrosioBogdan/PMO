@@ -1,0 +1,17 @@
+{
+  "name": "wa-automation-hub",
+  "private": true,
+  "scripts": {
+    "dev": "bun --filter '*' dev",
+    "build": "bun --filter '*' build",
+    "start": "bun --filter '*' start",
+    "lint": "bun --filter '*' lint"
+  },
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
