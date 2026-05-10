@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { getWAPage } from '../worker.js';
+import { getWAPage } from '../worker';
 import { getChats, getMessages } from '@wa-hub/wa-engine';
 
 export async function chatRoutes(fastify: FastifyInstance) {

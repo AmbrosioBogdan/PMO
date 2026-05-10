@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { messageQueue } from '../queue/index.js';
+import { messageQueue } from '../queue/index';
 import { prisma } from '@wa-hub/database';
 
 export async function messageRoutes(fastify: FastifyInstance) {

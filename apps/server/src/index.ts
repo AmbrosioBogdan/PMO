@@ -1,10 +1,10 @@
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
-import { messageRoutes } from './routes/messages.js';
-import { jobRoutes } from './routes/jobs.js';
-import { chatRoutes } from './routes/chats.js';
+import { messageRoutes } from './routes/messages';
+import { jobRoutes } from './routes/jobs';
+import { chatRoutes } from './routes/chats';
 import { Server } from 'socket.io';
-import * as worker from './worker.js';
+import * as worker from './worker';
 
 const fastify = Fastify({ logger: true });
 
