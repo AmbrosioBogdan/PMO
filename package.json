@@ -5,13 +5,18 @@
     "dev": "bun --filter '*' dev",
     "build": "bun --filter '*' build",
     "start": "bun --filter '*' start",
-    "lint": "bun --filter '*' lint"
+    "lint": "bun --filter '*' lint",
+    "db:generate": "bun --filter '@wa-hub/database' generate",
+    "db:push": "bun --filter '@wa-hub/database' push"
   },
   "workspaces": [
     "apps/*",
     "packages/*"
   ],
   "devDependencies": {
-    "typescript": "^5.0.0"
+    "@playwright/test": "^1.59.1",
+    "@types/node": "^20.12.12",
+    "tsup": "^8.0.2",
+    "typescript": "^5.4.5"
   }
 }
