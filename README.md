@@ -4,8 +4,8 @@ Personal, private, and modular web application designed to centralize, automate,
 
 ## 🔗 Deployment
 
-- **Frontend Dashboard**: [https://wa-hub-web-new.onrender.com](https://wa-hub-web-new.onrender.com)
-- **API Server**: [https://wa-hub-api-new.onrender.com](https://wa-hub-api-new.onrender.com)
+- **Frontend Dashboard**: [https://wa-hub-web-final.onrender.com](https://wa-hub-web-final.onrender.com)
+- **API Server**: [https://wa-hub-api-final.onrender.com](https://wa-hub-api-final.onrender.com)
 
 ## 🏗️ Technical Architecture
 
