@@ -3,7 +3,7 @@
   "private": true,
   "scripts": {
     "dev": "bun --filter '*' dev",
-    "build": "bun install && bun --filter '*' build",
+    "build": "bun install && bun run db:generate && bun --filter \"*\" build",
     "start": "bun --filter '*' start",
     "lint": "bun --filter '*' lint",
     "db:generate": "bun --filter '@wa-hub/database' generate",
@@ -11,7 +11,9 @@
   },
   "workspaces": [
     "apps/*",
-    "packages/*"
+    "packages/database",
+    "packages/ui",
+    "packages/wa-engine"
   ],
   "devDependencies": {
     "@playwright/test": "^1.59.1",
